@@ -14,13 +14,18 @@ else:
         response = openai.Completion.create(
             engine='text-davinci-003',
             prompt=prompt,
-            max_tokens=4000,  # Utilizar el máximo número de tokens posible
+            max_tokens=4000,
             temperature=0.7,
             n=1,
             stop=None,
             timeout=10
         )
         return response.choices[0].text.strip()
+
+    # Función para guardar el texto generado en un archivo .txt
+    def guardar_texto_en_archivo(texto_generado):
+        with open("texto_generado.txt", "w") as archivo:
+            archivo.write(texto_generado)
 
     # Función principal de la aplicación
     def main():
@@ -30,18 +35,30 @@ else:
         # Obtener el título del libro
         titulo = st.text_input("Ingresa el título del libro")
 
-        # Obtener el texto inicial del libro
-        texto_inicial = st.text_area("Ingresa el texto inicial del libro")
+        # Obtener el número de capítulos
+        num_capitulos = st.number_input("Ingresa el número de capítulos", min_value=1, step=1)
+
+        # Obtener el número de palabras por capítulo
+        num_palabras_por_capitulo = st.number_input("Ingresa el número de palabras por capítulo", min_value=1, step=1, max_value=4000)
+
+        # Obtener la audiencia a la que va dirigido el libro
+        audiencia = st.selectbox("Selecciona la audiencia a la que va dirigido el libro", ["Niños", "Adolescentes", "Adultos"])
 
         # Generar el texto del libro
         if st.button("Generar"):
-            if titulo and texto_inicial:
-                prompt = f"#{titulo}\n\n{texto_inicial}\n\n"
+            if titulo and num_capitulos and num_palabras_por_capitulo and audiencia:
+                prompt = f"#{titulo}\n\nEste libro consta de {num_capitulos} capítulos, cada uno con aproximadamente {num_palabras_por_capitulo} palabras. Está dirigido a {audiencia}.\n\n"
                 texto_generado = generar_texto(prompt)
                 st.subheader("Texto generado:")
                 st.write(texto_generado)
+
+                # Guardar el texto generado en un archivo .txt
+                guardar_texto_en_archivo(texto_generado)
+
+                # Proporcionar un enlace de descarga al usuario
+                st.markdown("[Descargar texto generado](texto_generado.txt)")
             else:
-                st.warning("Por favor, ingresa el título y el texto inicial del libro.")
+                st.warning("Por favor, completa todos los campos.")
 
     # Ejecutar la aplicación
     if __name__ == '__main__':
