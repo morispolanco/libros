@@ -17,7 +17,7 @@ else:
         edad = edad[0]
 
         # Determinar el número de palabras permitidas en función de la edad
-        num_palabras = 100 + (edad - 3) * 200
+        num_palabras = 300 + (edad - 3) * 200
 
         response = openai.Completion.create(
             engine='text-davinci-003',
