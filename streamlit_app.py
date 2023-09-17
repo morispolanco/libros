@@ -9,9 +9,9 @@ if not api_key:
 else:
     openai.api_key = api_key
 
-    # Función para generar texto utilizando GPT-3
-    def generar_texto(titulo, numero_capitulo):
-        prompt = f"Capítulo {numero_capitulo}: {titulo}\n\n"
+    # Función para generar cuentos utilizando GPT-3
+    def generar_cuento(edad):
+        prompt = f"Genera un cuento para niños de {edad} años.\n\n"
 
         response = openai.Completion.create(
             engine='text-davinci-003',
@@ -26,31 +26,34 @@ else:
 
     # Función principal de la aplicación
     def main():
-        st.title("Generador de Libros con GPT-3")
-        st.write("¡Bienvenido! Utiliza este generador para escribir un libro con la ayuda de GPT-3.")
+        st.title("Generador de Cuentos para Niños")
+        st.write("¡Bienvenido! Utiliza este generador para crear cuentos para niños en español.")
 
-        # Obtener el título del libro
-        titulo = st.text_input("Ingresa el título del libro")
+        # Opciones de rangos de edad
+        opciones_edad = {
+            "De 3 a 5 años": (3, 5),
+            "De 6 a 8 años": (6, 8),
+            "De 9 a 10 años": (9, 10),
+            "De 11 a 15 años": (11, 15)
+        }
 
-        # Obtener el número del capítulo
-        numero_capitulo = st.number_input("Ingresa el número del capítulo", min_value=1, step=1)
+        # Obtener el rango de edad seleccionado
+        edad_opcion = st.selectbox("Selecciona el rango de edad", list(opciones_edad.keys()))
 
-        # Generar el texto del libro
-        if st.button("Generar"):
-            if titulo:
-                contenido_libro = generar_texto(titulo, numero_capitulo)
+        # Generar el cuento
+        if st.button("Generar Cuento"):
+            rango_edad = opciones_edad[edad_opcion]
+            cuento = generar_cuento(rango_edad)
 
-                # Mostrar el texto generado
-                st.subheader("Texto generado:")
-                st.write(contenido_libro)
+            # Mostrar el cuento generado
+            st.subheader("Cuento generado:")
+            st.write(cuento)
 
-                # Descargar el texto generado como archivo
-                if st.button("Descargar"):
-                    with open(f"{titulo}_capitulo{numero_capitulo}.txt", "w") as file:
-                        file.write(contenido_libro)
-                    st.success("¡El archivo se ha descargado exitosamente!")
-            else:
-                st.warning("Por favor, ingresa un título para el libro.")
+            # Descargar el cuento generado como archivo
+            if st.button("Descargar"):
+                with open(f"cuento_para_ninos_{edad_opcion.replace(' ', '_')}.txt", "w") as file:
+                    file.write(cuento)
+                st.success("¡El cuento se ha descargado exitosamente!")
 
     # Ejecutar la aplicación
     if __name__ == '__main__':
