@@ -13,10 +13,20 @@ else:
     def generar_cuento(edad):
         prompt = f"Genera un cuento para niños de {edad} años.\n\n"
 
+        # Determinar el número de tokens permitidos en función de la edad
+        if edad <= 5:
+            max_tokens = 800
+        elif edad <= 8:
+            max_tokens = 1200
+        elif edad <= 10:
+            max_tokens = 1600
+        else:
+            max_tokens = 2000
+
         response = openai.Completion.create(
             engine='text-davinci-003',
             prompt=prompt,
-            max_tokens=4000,
+            max_tokens=max_tokens,
             temperature=0.7,
             n=1,
             stop=None,
