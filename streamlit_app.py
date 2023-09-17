@@ -16,20 +16,13 @@ else:
         # Obtener el valor de la edad
         edad = edad[0]
 
-        # Determinar el número de tokens permitidos en función de la edad
-        if edad <= 5:
-            max_tokens = 800
-        elif edad <= 8:
-            max_tokens = 1200
-        elif edad <= 10:
-            max_tokens = 1600
-        else:
-            max_tokens = 2000
+        # Determinar el número de palabras permitidas en función de la edad
+        num_palabras = 100 + (edad - 3) * 200
 
         response = openai.Completion.create(
             engine='text-davinci-003',
             prompt=prompt,
-            max_tokens=max_tokens,
+            max_tokens=num_palabras,
             temperature=0.7,
             n=1,
             stop=None,
@@ -61,17 +54,6 @@ else:
             # Mostrar el cuento generado
             st.subheader("Cuento generado:")
             st.write(cuento)
-
-            # Descargar el cuento generado como archivo
-            if st.button("Descargar"):
-                with open(f"cuento_para_ninos_{edad_opcion.replace(' ', '_')}.txt", "w") as file:
-                    file.write(cuento)
-                st.success("¡El cuento se ha descargado exitosamente!")
-
-                # Crear el botón de descarga
-                download_button_str = f"Descargar cuento para niños de {edad_opcion}"
-                download_button_href = f"data:text/plain;charset=utf-8,{cuento}"
-                st.download_button(download_button_str, download_button_href, file_name=f"cuento_para_ninos_{edad_opcion.replace(' ', '_')}.txt")
 
     # Ejecutar la aplicación
     if __name__ == '__main__':
