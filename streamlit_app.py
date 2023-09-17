@@ -24,7 +24,7 @@ else:
 
     # Función para guardar el texto generado en un archivo .txt
     def guardar_texto_en_archivo(texto_generado):
-        with open("texto_generado.txt", "w") as archivo:
+        with open("libro_generado.txt", "w") as archivo:
             archivo.write(texto_generado)
 
     # Función principal de la aplicación
@@ -48,7 +48,15 @@ else:
         if st.button("Generar"):
             if titulo and num_capitulos and num_palabras_por_capitulo and audiencia:
                 prompt = f"#{titulo}\n\nEste libro consta de {num_capitulos} capítulos, cada uno con aproximadamente {num_palabras_por_capitulo} palabras. Está dirigido a {audiencia}.\n\n"
-                texto_generado = generar_texto(prompt)
+
+                # Generar el contenido de cada capítulo
+                contenido_capitulos = []
+                for i in range(num_capitulos):
+                    contenido_capitulo = generar_texto(f"Capítulo {i+1}\n\n")
+                    contenido_capitulos.append(contenido_capitulo)
+
+                # Combinar el contenido de cada capítulo en el texto completo del libro
+                texto_generado = prompt + "\n\n".join(contenido_capitulos)
                 st.subheader("Texto generado:")
                 st.write(texto_generado)
 
@@ -56,7 +64,7 @@ else:
                 guardar_texto_en_archivo(texto_generado)
 
                 # Proporcionar un enlace de descarga al usuario
-                st.markdown("[Descargar texto generado](texto_generado.txt)")
+                st.markdown("[Descargar libro generado](libro_generado.txt)")
             else:
                 st.warning("Por favor, completa todos los campos.")
 
