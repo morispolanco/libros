@@ -14,7 +14,7 @@ else:
         response = openai.Completion.create(
             engine='text-davinci-003',
             prompt=prompt,
-            max_tokens=4096,  # Utilizar el máximo número de tokens posible
+            max_tokens=4000,  # Utilizar el máximo número de tokens posible
             temperature=0.7,
             n=1,
             stop=None,
