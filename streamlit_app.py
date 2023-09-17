@@ -13,6 +13,9 @@ else:
     def generar_cuento(edad):
         prompt = f"Genera un cuento para niños de {edad} años.\n\n"
 
+        # Obtener el valor de la edad
+        edad = edad[0]
+
         # Determinar el número de tokens permitidos en función de la edad
         if edad <= 5:
             max_tokens = 800
