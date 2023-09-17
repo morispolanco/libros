@@ -68,6 +68,11 @@ else:
                     file.write(cuento)
                 st.success("¡El cuento se ha descargado exitosamente!")
 
+                # Crear el botón de descarga
+                download_button_str = f"Descargar cuento para niños de {edad_opcion}"
+                download_button_href = f"data:text/plain;charset=utf-8,{cuento}"
+                st.download_button(download_button_str, download_button_href, file_name=f"cuento_para_ninos_{edad_opcion.replace(' ', '_')}.txt")
+
     # Ejecutar la aplicación
     if __name__ == '__main__':
         main()
